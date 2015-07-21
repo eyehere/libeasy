@@ -1,0 +1,117 @@
+/****************************************************************************
+ *
+ * Copyright (C) 2003-2012 Sourcefire, Inc.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License Version 2 as
+ * published by the Free Software Foundation.  You may not use, modify or
+ * distribute this program under any other version of the GNU General
+ * Public License.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+ *
+ ****************************************************************************/
+
+/*
+     hash_fcn.c
+
+     Each hash table must allocate it's own SFGHASH struct, this is because
+     sfghash_new uses the number of rows in the hash table to modulo the random
+     values.
+
+     Updates:
+
+     8/31/2006 - man - changed to use prime_table.c
+*/
+#include "hash_fcn.h"
+#include "prime_table.h"
+
+
+hash_fcn_t * hash_fcn_new( int m )
+{
+    hash_fcn_t * p;
+    static int one=1;
+
+    if( one ) /* one time init */
+    {
+        srand( (unsigned) time(0) );
+        one = 0;
+    }
+
+    // This can make all of the hashing static for testing.
+    //#define rand() 0
+
+    p = (hash_fcn_t*) calloc( 1,sizeof(hash_fcn_t) );
+    if( !p )
+        return 0;
+
+    p->seed     = nearest_prime( (rand()%m)+3191 );
+    p->scale    = nearest_prime( (rand()%m)+709 );
+    p->hardener = (rand()*rand()) + 133824503;
+
+    p->hash_fcn   = &hash_fcn_hash;
+    p->keycmp_fcn = &memcmp;
+
+    return p;
+}
+
+void hash_fcn_free( hash_fcn_t * p )
+{
+   if( p )
+   {
+       free( p);
+   }
+}
+
+void hash_fcn_static( hash_fcn_t * p )
+{
+    p->seed     = 3193;
+    p->scale    = 719;
+    p->hardener = 133824503;
+}
+
+unsigned hash_fcn_hash( hash_fcn_t * p, unsigned char *d, int n )
+{
+    unsigned hash = p->seed;
+    while( n )
+    {
+        hash *=  p->scale;
+        hash += *d++;
+        n--;
+    }
+    return hash ^ p->hardener;
+}
+
+/**
+ * Make hash_fcn use a separate set of operators for the backend.
+ *
+ * @param h hash_fcn ptr
+ * @param hash_fcn user specified hash function
+ * @param keycmp_fcn user specified key comparisoin function
+ */
+int hash_fcn_set_keyops( hash_fcn_t *h,
+                          unsigned (*hash_fcn)( hash_fcn_t * p,
+                                                unsigned char *d,
+                                                int n),
+                          int (*keycmp_fcn)( const void *s1,
+                                             const void *s2,
+                                             size_t n))
+{
+    if(h && hash_fcn && keycmp_fcn)
+    {
+        h->hash_fcn   = hash_fcn;
+        h->keycmp_fcn = keycmp_fcn;
+
+        return 0;
+    }
+
+    return -1;
+}
+
