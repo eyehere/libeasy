@@ -16,18 +16,20 @@
 #ifndef _EASY_H_
 #define _EASY_H_
 
-#include "estring.h"
-#include "etime.h"
-#include "elog.h"
-#include "eother.h"
-#include "equeue.h"
-#include "emem_pool.h"
-#include "ethread_pool.h"
-#include "ememory.h"
 #include "ebuffer.h"
+#include "ecommon.h"
+#include "elog.h"
+#include "emem_pool.h"
+#include "ememory.h"
+#include "enetwork.h"
+#include "eother.h"
 #include "eprocess_lock.h"
 #include "eproperty.h"
-#include "enetwork.h"
+#include "equeue.h"
 #include "eshm.h"
+#include "estring.h"
+#include "esyslog.h"
+#include "ethread_pool.h"
+#include "etime.h"
 
 #endif
