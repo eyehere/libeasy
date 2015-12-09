@@ -16,11 +16,11 @@
 #ifndef _EASY_H_
 #define _EASY_H_
 
-#include "ebuffer.h"
 #include "ecommon.h"
 #include "elog.h"
 #include "emem_pool.h"
 #include "ememory.h"
+#include "ebuffer.h"
 #include "enetwork.h"
 #include "eother.h"
 #include "eprocess_lock.h"
