@@ -187,6 +187,7 @@ int remove_file(char *file_name)
     return 1;
 }
 
+
 int get_ip(const char* version, char* address)
 {
     struct ifaddrs * ifAddrStruct=NULL;
@@ -196,14 +197,18 @@ int get_ip(const char* version, char* address)
 
     while (ifAddrStruct!=NULL) {
         if (ifAddrStruct->ifa_addr->sa_family==AF_INET) {
-            if (0 == strcmp(ifAddrStruct->ifa_name,"en0") && 0 == strcmp(version,"v4")) {
+            if ((0 == strcmp(ifAddrStruct->ifa_name,"en0") ||
+            	 0 == strcmp(ifAddrStruct->ifa_name,"eth0")) &&
+            		0 == strcmp(version,"v4")) {
             	tmpAddrPtr = &((struct sockaddr_in *)ifAddrStruct->ifa_addr)->sin_addr;
             	inet_ntop(AF_INET, tmpAddrPtr, address, INET_ADDRSTRLEN);
             	return 1;
             }
         }
         else if (ifAddrStruct->ifa_addr->sa_family==AF_INET6) {
-            if (0 == strcmp(ifAddrStruct->ifa_name,"en0") && 0 == strcmp(version,"v6")) {
+        	if ((0 == strcmp(ifAddrStruct->ifa_name,"en0") ||
+        	            	 0 == strcmp(ifAddrStruct->ifa_name,"eth0")) &&
+        	            		0 == strcmp(version,"v6")) {
             	tmpAddrPtr=&((struct sockaddr_in *)ifAddrStruct->ifa_addr)->sin_addr;
             	inet_ntop(AF_INET6, tmpAddrPtr, address, INET6_ADDRSTRLEN);
             	return 1;
