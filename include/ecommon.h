@@ -38,6 +38,7 @@
 #include <errno.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <ifaddrs.h>
 #include <arpa/inet.h>
 #include <signal.h>
 #include <sys/un.h>

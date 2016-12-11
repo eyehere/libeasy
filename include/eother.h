@@ -105,4 +105,16 @@ int create_file_if_not_existed(char *file_name);
  */
 int remove_file(char *file_name);
 
+/**
+ *        Name: get_ip
+ * Description: 获取本机的IP
+ *   Parameter: version -> v4 | v6.
+ *	 Parameter: address ->
+ *	 				char address[INET_ADDRSTRLEN] |
+ *	 				char address[INET6_ADDRSTRLEN]
+ *      Return: 1 -> 成功
+ *      		0 -> 失败
+ */
+int get_ip(const char* version, char* address);
+
 #endif
