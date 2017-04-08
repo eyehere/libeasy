@@ -1,6 +1,8 @@
 # libeasy
 
-libeasy是一个基于纯C开发的基础类工具类库,辅助C/C++项目的快速开发。
+## libeasy是一个基于纯C开发的基础类工具类库,辅助C/C++项目的快速开发。
+
+```
 
 ├── Makefile
 └── lib
@@ -35,3 +37,5 @@ libeasy是一个基于纯C开发的基础类工具类库,辅助C/C++项目的快
         ├── ethread_pool.h
         ├── etime.c
         └── etime.h
+        
+```
