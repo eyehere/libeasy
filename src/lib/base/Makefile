@@ -2,7 +2,7 @@ CC				= gcc
 CFLAGS			= 
 LIBS			= -lpthread
 			  
-SRCS			= $(wildcard lib/base/*.c)
+SRCS			= $(wildcard *.c)
 OBJS			= $(patsubst %.c,%.o,$(SRCS))
 
 SRC_DIRS 		= $(dir $(SRCS))
@@ -16,8 +16,8 @@ LIB_EASY		= libeasy.a
 all:$(OBJS)
 	ar rcs $(LIB_EASY) $(OBJS)
 	@echo $(LIB_EASY) is generated
-	-mkdir ../lib
-	-cp $(LIB_EASY) ../lib/
+	-mkdir ../../../lib
+	-cp $(LIB_EASY) ../../../lib/
 
 $(OBJS):%.o:%.c
 	$(CC) $(INCLUDES) -c -o $@ $<
@@ -26,4 +26,4 @@ $(OBJS):%.o:%.c
 clean:
 	-rm $(OBJS)
 	-rm $(LIB_EASY)
-	-rm -rf ../lib
+	-rm -rf ../../../lib
